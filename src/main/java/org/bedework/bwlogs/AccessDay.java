@@ -29,6 +29,11 @@ public class AccessDay extends AccessPeriod {
     return hours[hr];
   }
 
+  /** Update from the given access log entry. These should appear in
+   * increasing time order.
+   *
+   * @param ale access log entry
+   */
   public void updateFrom(final AccessLogEntry ale) {
     addIp(ale.ip, ale.hourOfDay);
   }
