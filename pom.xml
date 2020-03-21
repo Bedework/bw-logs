@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bedework</groupId>
   <artifactId>bw-logs</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>bw-logs</name>
   <description>Processing of logs for bedework</description>
   <url>https://github.com/Bedework/bw-logs</url>
@@ -45,6 +45,7 @@
     <connection>scm:git:git@github.com:Bedework/bw-logs.git</connection>
     <developerConnection>scm:git:git@github.com:Bedework/bw-logs.git</developerConnection>
     <url>https://github.com/Bedework/bw-logs</url>
+    <tag>bw-logs-1.0.0</tag>
   </scm>
 
   <issueManagement>
