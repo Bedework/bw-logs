@@ -130,18 +130,18 @@ public class AccessLogEntry {
       }
     }
 
-    var end = req.indexOf("\"", curPos + 1);
+    final var end = req.indexOf("\"", curPos + 1);
     if (end < 0) {
       return null;
     }
 
-    var res = req.substring(curPos + 1, end - 1);
+    final var res = req.substring(curPos + 1, end - 1);
     curPos = end + 1;
 
     return res;
   }
 
-  private static Map<String, String> toMonth = new HashMap<>();
+  private static final Map<String, String> toMonth = new HashMap<>();
   static {
     toMonth.put("Jan", "01");
     toMonth.put("Feb", "02");
@@ -170,7 +170,7 @@ public class AccessLogEntry {
               toMonth.get(dt.substring(3, 6)) + "/" +
               dt.substring(0, 2);
 
-      return ((((hourOfDay * 60) + mins) * 60) + secs) * 1000;
+      return ((((hourOfDay * 60L) + mins) * 60) + secs) * 1000;
     } catch (final Throwable ignored) {
       return null;
     }
@@ -211,11 +211,13 @@ public class AccessLogEntry {
     return (curPos >= 0) && (curPos < req.length());
   }
 
-  protected void error(final String format, Object... args) {
+  protected void error(final String format,
+                       final Object... args) {
     System.out.println(String.format(format, args));
   }
 
-  protected void out(final String format, Object... args) {
+  protected void out(final String format,
+                     final Object... args) {
     System.out.println(String.format(format, args));
   }
 

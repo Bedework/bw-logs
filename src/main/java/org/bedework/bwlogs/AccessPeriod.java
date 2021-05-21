@@ -25,7 +25,7 @@ public class AccessPeriod {
     var i = ipCounts.getOrDefault(ip, 0);
     ipCounts.put(ip, i + 1);
 
-    var ip2 = getIp2(ip);
+    final var ip2 = getIp2(ip);
     if (ip2 == null) {
       return;
     }
@@ -51,17 +51,17 @@ public class AccessPeriod {
   }
 
   public void add(final AccessPeriod ap) {
-    for (var ip: ap.ipCounts.keySet()) {
-      var ct = ap.ipCounts.get(ip);
+    for (final var ip: ap.ipCounts.keySet()) {
+      final var ct = ap.ipCounts.get(ip);
 
-      var i = ipCounts.getOrDefault(ip, 0);
+      final var i = ipCounts.getOrDefault(ip, 0);
       ipCounts.put(ip, i + ct);
     }
 
-    for (var ip2: ap.ip2Counts.keySet()) {
-      var ct = ap.ip2Counts.get(ip2);
+    for (final var ip2: ap.ip2Counts.keySet()) {
+      final var ct = ap.ip2Counts.get(ip2);
 
-      var i = ip2Counts.getOrDefault(ip2, 0);
+      final var i = ip2Counts.getOrDefault(ip2, 0);
       ipCounts.put(ip2, i + ct);
     }
   }

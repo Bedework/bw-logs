@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class AccessTracker {
   // One entry per day
-  private Map<String, AccessDay> dayValues = new HashMap<>();
+  private final Map<String, AccessDay> dayValues = new HashMap<>();
 
   /** Update from the given access log entry. These should appear in
    * increasing time order.
