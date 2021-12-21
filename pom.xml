@@ -13,6 +13,13 @@
   <description>Processing of logs for bedework</description>
   <url>https://github.com/Bedework/bw-logs</url>
 
+  <scm>
+    <connection>scm:git:git@github.com:Bedework/bw-logs.git</connection>
+    <developerConnection>scm:git:git@github.com:Bedework/bw-logs.git</developerConnection>
+    <url>https://github.com/Bedework/bw-logs</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <dependencies>
     <!-- Bedework Dependencies -->
     <dependency>
