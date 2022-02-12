@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>bw-logs</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2-SNAPSHOT</version>
   <name>Bedework: Process logs for some bedework stats</name>
   <description>Processing of logs for bedework</description>
   <url>https://github.com/Bedework/bw-logs</url>
