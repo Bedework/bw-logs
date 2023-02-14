@@ -22,9 +22,48 @@
 
   <dependencies>
     <!-- Bedework Dependencies -->
+
+    <dependency>
+      <groupId>org.bedework</groupId>
+      <artifactId>bw-util-args</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.bedework</groupId>
       <artifactId>bw-util-misc</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+
+        <configuration>
+          <assembleDirectory>${project.build.directory}/logs</assembleDirectory>
+          <programs>
+            <program>
+              <mainClass>org.bedework.bwlogs.BwLogs</mainClass>
+              <id>client</id>
+            </program>
+          </programs>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
