@@ -3,7 +3,7 @@
 */
 package org.bedework.bwlogs;
 
-import org.bedework.util.misc.ToString;
+import org.bedework.base.ToString;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
