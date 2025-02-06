@@ -48,6 +48,14 @@ For full details, see [Sonatype's documentation for using Maven to publish relea
 ### 1.1.0
 * Update library versions
 
-### 1.1.
+### 1.1.1
+* Update library versions
+
+### 1.1.2
 * Update library versions
 * Build bw-logs as the app for log processing. Add new script and update script to use that module
+
+### 1.1.3
+* Update library versions
+* Move response classes and ToString into bw-base module.
+* pre-jakarta release
