@@ -1,0 +1,3 @@
+[[logs]]
+== Bedework log processing
+Provides classes to help in processing bedework log files.

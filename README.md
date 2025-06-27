@@ -1,11 +1,11 @@
-# bw-logs [![Build Status](https://travis-ci.org/Bedework/bw-logs.svg)](https://travis-ci.org/Bedework/bw-logs)
+# bw-logs 
 
 This project provides a number of classes and methods for processing of logs for
-[Bedework](https://www.apereo.org/projects/bedework).
+[Bedework](https://www.apereo.org/projects/bedework). It also provides a runnable cli.
 
 ## Requirements
 
-1. JDK 17
+1. JDK 21
 2. Maven 3
 
 ## Building Locally

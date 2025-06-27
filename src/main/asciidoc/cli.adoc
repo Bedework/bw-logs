@@ -1,0 +1,40 @@
+[[cli]]
+== Bedework log cli
+
+The cli can be used, for example,  to print a summary of information in a log file or to print all entries for a given session in a more readable form.
+
+=== Options
+These must appear before the actions.
+
+logshowlong:: option for most actions. Set to enable display of long running requests.
+
+logshowmissingtaskids:: option for *loganalyse* and *sessions*
+
+sessions:: Print matching sessions
+
+skipAnon:: option for *sessions*
+
+displayTotals:: option for *sessions*
+
+sessionId:: option for *sessions*
+
+sessionUser:: option for *sessions*
+
+taskId:: option for *sessions*
+
+requestDt:: option for *sessions*
+
+list:: option for *sessions*
+
+full:: option for *sessions*
+
+summary:: option for *sessions*
+
+=== Actions
+Precede these with the appropriate options and follow with the path to the log file.
+
+access:: Analyze an access log
+
+logsummarisetests:: display a summary to help when running the tests
+
+loganalyse:: Print an analysis of the log file.
