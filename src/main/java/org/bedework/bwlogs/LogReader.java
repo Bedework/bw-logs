@@ -3,10 +3,8 @@
 */
 package org.bedework.bwlogs;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.LineNumberReader;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +32,8 @@ public abstract class LogReader {
 
   protected final Map<String, ReqInOutLogEntry> tasks = new HashMap<>();
 
+  protected final Sessions sessions = new Sessions();
+
   protected final Map<String, ContextInfo> contexts = new HashMap<>();
 
   protected static Map<String, Integer> longreqIpMap = new HashMap<>();
@@ -57,14 +57,14 @@ public abstract class LogReader {
     this.showMissingTaskIds = showMissingTaskIds;
 
     try {
-      final Path logPath = Paths.get(logPathName);
+      final var logPath = Paths.get(logPathName);
 
-      final File logFile = logPath.toFile();
+      final var logFile = logPath.toFile();
 
-      final LineNumberReader lnr = new LineNumberReader(new FileReader(logFile));
+      final var lnr = new LineNumberReader(new FileReader(logFile));
 
       while (true) {
-        final String s = lnr.readLine();
+        final var s = lnr.readLine();
 
         if (s == null) {
           break;
@@ -103,12 +103,17 @@ public abstract class LogReader {
       return;
     }
 
-    ReqInOutLogEntry rs = tryRequestLine(s);
+    final var sessionInfo = sessions.trySessionStart(s);
+    if (sessionInfo != null) {
+      return;
+    }
+
+    var rs = tryRequestLine(s);
 
     if (rs != null) {
       lastReqline = rs;
 
-      final ReqInOutLogEntry mapRs = tasks.get(rs.taskId);
+      final var mapRs = tasks.get(rs.taskId);
 
       if (mapRs != null) {
         // No request-out message
@@ -116,6 +121,9 @@ public abstract class LogReader {
       }
 
       tasks.put(rs.taskId, rs);
+
+      // See if this is new session
+      sessions.requestIn(rs.sessionId, rs.ip);
 
       return;
     }
@@ -199,8 +207,8 @@ public abstract class LogReader {
 
   private ReqInOutLogEntry tryRequestInOutLine(final String ln,
                                                final boolean in) {
-    final ReqInOutLogEntry rs = new ReqInOutLogEntry();
-    final Integer res = rs.parse(ln, in);
+    final var rs = new ReqInOutLogEntry();
+    final var res = rs.parse(ln, in);
 
     if ((res == null) || (res < 0)) {
       return null;

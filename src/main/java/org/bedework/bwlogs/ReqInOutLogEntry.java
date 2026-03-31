@@ -151,7 +151,7 @@ public class ReqInOutLogEntry extends LogEntry {
       context = url.substring(urlPos, endContextPos);
       request = url.substring(reqPos);
 
-      if (context.trim().length() == 0) {
+      if (context.trim().isEmpty()) {
         context = null;
       }
     } catch (final Throwable t) {
@@ -212,26 +212,6 @@ public class ReqInOutLogEntry extends LogEntry {
 
   public boolean hasJsessionid() {
     return (url != null) && url.contains(";jsessionid=");
-  }
-
-  // Expect this next
-  protected String field() {
-    return field("");
-  }
-
-  // Needed because ipv6 addresses have ':'
-  protected String field(final String nextFieldStart) {
-    final int start = curPos;
-    final int end = req.indexOf(":" + nextFieldStart, start);
-    if (end < 0) {
-      error("No end found for %s", req);
-      return null;
-    }
-
-    final String res = req.substring(start, end);
-    curPos = end + 1; // Skip only the ":"
-
-    return res;
   }
 
   String dashField() {

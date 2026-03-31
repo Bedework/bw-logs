@@ -163,6 +163,46 @@ public class LogEntry {
     return res;
   }
 
+  // Expect this next
+  protected String field() {
+    return field("");
+  }
+
+  protected Integer intField() {
+    final var s = field();
+    try {
+      return Integer.valueOf(s);
+    } catch (final Throwable ignored) {
+      return null;
+    }
+
+  }
+
+  protected Long longField() {
+    final var s = field();
+    try {
+      return Long.valueOf(s);
+    } catch (final Throwable ignored) {
+      return null;
+    }
+
+  }
+
+  // Needed because ipv6 addresses have ':'
+  protected String field(final String nextFieldStart) {
+    final int start = curPos;
+    final int end = req.indexOf(":" + nextFieldStart, start);
+    if (end < 0) {
+      error("No end found for %s", req);
+      return null;
+    }
+
+    final String res = req.substring(start, end);
+    curPos = end + 1; // Skip only the ":"
+
+    return res;
+  }
+
   private String taskId(final String ln) {
     //final int taskIdPos = ln.indexOf("] (default");
     int taskIdPos = ln.indexOf("] (");

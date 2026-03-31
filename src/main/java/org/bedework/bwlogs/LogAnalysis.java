@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static java.lang.String.format;
+
 /** Q&D log analyzer. Here so we can run it from the cli
  *
  * <p>A log line looks like (this is one line)<pre>
@@ -40,6 +42,8 @@ public class LogAnalysis extends LogReader {
       outFmt("Total forwarded requests: %d", totalForwardedRequests);
     }
 
+    outFmt("Total sessions: %d", sessions.size());
+
     outFmt("Millis per request by context per 100 millis");
 
     final Set<String> contextNames = new TreeSet<>(contexts.keySet());
@@ -52,7 +56,7 @@ public class LogAnalysis extends LogReader {
     int cx = 0;
 
     final StringBuilder header =
-            new StringBuilder(String.format(labelPattern, ""));
+            new StringBuilder(format(labelPattern, ""));
 
     for (final String context: contextNames) {
       final ContextInfo ci = contexts.get(context);
@@ -62,7 +66,7 @@ public class LogAnalysis extends LogReader {
       cellFormats[cx] = " %" + fldLen + "s - %3s%% |";
       final String hdrFmt  = "        %" + fldLen + "s |";
       hdrFormats[cx] = hdrFmt;
-      header.append(String.format(hdrFmt, context));
+      header.append(format(hdrFmt, context));
       cx++;
     }
 
@@ -71,16 +75,17 @@ public class LogAnalysis extends LogReader {
     // Output each bucket for each context
 
     for (int i = 0; i < ContextInfo.numMilliBuckets; i++) {
-      final StringBuilder l =
-              new StringBuilder(String.format(labelPattern, "<" + ((i + 1) * 100)));
+      final var l = new StringBuilder(
+          format(labelPattern,
+                        "<" + ((i + 1) * 100)));
 
       for (int j = 0; j < cis.length; j++) {
-        final ContextInfo ci = cis[j];
+        final var ci = cis[j];
         // bucket and percent
 
-        l.append(String.format(cellFormats[j],
-                 ci.getBucket(i),
-                 ((int)(100 * ci.rTotalReq / ci.getRequests()))));
+        l.append(format(cellFormats[j],
+                        ci.getBucket(i),
+                        ((int)(100 * ci.rTotalReq / ci.getRequests()))));
 
         ci.rTotalReq += ci.getBucket(i);
       }
@@ -90,32 +95,32 @@ public class LogAnalysis extends LogReader {
 
     // Total lines
 
-    final StringBuilder sessReq =
-            new StringBuilder(String.format(labelPattern, "Sess"));
-    final StringBuilder totReq =
-            new StringBuilder(String.format(labelPattern, "Total"));
-    final StringBuilder avgMs =
-            new StringBuilder(String.format(labelPattern, "Avg ms"));
+    final var sessReq = new StringBuilder(
+        format(labelPattern, "Sess"));
+    final var totReq = new StringBuilder(
+        format(labelPattern, "Total"));
+    final var avgMs = new StringBuilder(
+        format(labelPattern, "Avg ms"));
 
-    final StringBuilder subTtotReq =
-            new StringBuilder(String.format(labelPattern, "Total"));
-    final StringBuilder subTavgMs =
-            new StringBuilder(String.format(labelPattern, "Avg ms"));
+    final var subTtotReq = new StringBuilder(
+        format(labelPattern, "Total"));
+    final var subTavgMs = new StringBuilder(
+        format(labelPattern, "Avg ms"));
 
     for (int j = 0; j < cis.length; j++) {
       final ContextInfo ci = cis[j];
 
-      sessReq.append(String.format(hdrFormats[j],
-                                  ci.getSessions()));
-      totReq.append(String.format(hdrFormats[j],
-                                  ci.getRequests()));
-      avgMs.append(String.format(hdrFormats[j],
-                                 (int)(ci.getTotalMillis() / ci.getRequests())));
+      sessReq.append(format(hdrFormats[j],
+                            ci.getSessions()));
+      totReq.append(format(hdrFormats[j],
+                           ci.getRequests()));
+      avgMs.append(format(hdrFormats[j],
+                          (int)(ci.getTotalMillis() / ci.getRequests())));
 
-      subTtotReq.append(String.format(hdrFormats[j],
-                                      ci.getSubTrequests()));
-      subTavgMs.append(String.format(hdrFormats[j],
-                                     (int)(ci.getSubTtotalMillis() / ci.getSubTrequests())));
+      subTtotReq.append(format(hdrFormats[j],
+                               ci.getSubTrequests()));
+      subTavgMs.append(format(hdrFormats[j],
+                              (int)(ci.getSubTtotalMillis() / ci.getSubTrequests())));
     }
 
     outFmt("%s", sessReq);
@@ -132,12 +137,13 @@ public class LogAnalysis extends LogReader {
 
     final int numIps = 20;
     outFmt("List of top %d ips", numIps);
+    outFmt("ips\trequests\tavg per session", numIps);
 
-    final List<Map.Entry<String, Integer>> sorted =
-            Util.sortMap(ReqInOutLogEntry.ipMap);
+    final var sorted = Util.sortMap(ReqInOutLogEntry.ipMap);
     int ct = 0;
-    for (final Map.Entry<String, Integer> ent: sorted) {
-      outFmt("%s\t%d", ent.getKey(), ent.getValue());
+    for (final var ent: sorted) {
+      outFmt("%s\t%d\t%d", ent.getKey(), ent.getValue(),
+             sessions.getSessionCounts(ent.getKey()).avg());
       ct++;
 
       if (ct > numIps) {
@@ -147,6 +153,7 @@ public class LogAnalysis extends LogReader {
 
     out();
 
+    outSessionInfo();
     outFmt("List of top %d long request ips", numIps);
 
     final List<Map.Entry<String, Integer>> longSorted =
@@ -161,4 +168,18 @@ public class LogAnalysis extends LogReader {
       }
     }
   }
+
+  private void outSessionInfo() {
+    outFmt("List of ips by average number of requests per session");
+    outFmt("ip\t\tNum requests\tAverage");
+
+    final var allCounts = sessions.getAllSessionCounts();
+
+    for (final var ent: allCounts) {
+      outFmt("%s\t%d\t%d", ent.getKey(),
+             ent.getValue().numRequests(),
+             ent.getValue().avg());
+    }
+  }
 }
+
